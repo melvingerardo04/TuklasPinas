@@ -1,0 +1,53 @@
+@extends('layouts.app')
+
+@if(Auth::guest())
+     
+@else 
+@section('content')
+<a href="/posts/create" class="btn btn-primary">Create Post</a>
+    <h1> Posts</h1>
+    @if(count($posts) > 0)
+        @foreach ($posts as $post)
+            <div class="well">
+                <div class="row">
+                    <div class="col-md-2 col-sm-2">
+                            <img style="vertical-align" width="120px" align="left"src="/storage/profiles/{{$post->user->profile_pic}}"> 
+                            
+                    </div>
+                    <div class="col-md-8 col-sm-8">
+                            <h3><a href ="/posts/{{$post->id}}">{{$post ->title}}</a></h3>
+                           
+                            <p class="ArticleBody">
+                                    {{ str_limit(strip_tags($post->body), 50) }}
+                                    @if (strlen(strip_tags($post->body)) > 50)
+                                       <a href="{{ action('PostsController@show', $post) }}" class="btn btn-info btn-sm">Read More</a>
+                                    @endif
+                                </p>
+
+                               Posted on:  <b>{{ $post->provinces }}<br></b>
+                            <small> Written on {{$post->created_at}}<br>
+                            by: {{$post->user->firstName}} {{$post->user->lastName}}</small>
+                          
+                    </div>   
+                </div>
+            </div>
+            
+        @endforeach
+        {{$posts->links()}}
+    @else
+        <p> No posts found </p>
+    @endif
+@endsection
+
+@endif
+
+
+
+
+<!-- {!! strip_tags(substr($post->body,0, 20)) !!}
+                                           {{ str_limit(strip_tags($post->body), 500) }} 
+                                               @if (strlen(strip_tags($post->body)) , 500) 
+                                                
+                                                    <a href="{{ action('PostsController@show', $post) }}" class="fa">Read More</a>
+                                                @endif 
+                                                   -->

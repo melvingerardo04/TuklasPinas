@@ -1,0 +1,142 @@
+body {
+   
+    font-family: No seven regular;
+    font-size: 15px;
+  }
+
+.box {
+  position: absolute;
+  top: 60%;
+  left: 60%;
+  transform: translate(-50%, -50%);
+  width: 55rem;
+  height:60rem;
+  padding: 2.5rem;
+  box-sizing: border-box;
+  background: rgba(114, 110, 110, 0.6);
+  border-radius: 0.625rem;
+  
+}
+
+.box h1 {
+  margin: 0 0 1.875rem;
+  padding: 0;
+  color: #fff;
+  text-align: center;
+}
+
+.box .inputBox {
+  top:3rem;
+  position: relative;
+  margin-top:-25px;
+}
+
+.box .inputBox input {
+  width: 100%;
+  padding: 0.625rem 0;
+  font-size: 1.5rem;
+  color: #fff;
+  letter-spacing: 0.062rem;
+  margin-bottom: 1.875rem;
+  border: none;
+  border-bottom: 0.065rem solid #fff;
+  outline: none;
+  background: transparent;
+}
+
+
+.box .inputBox label {
+  position: absolute;
+  top: 0;
+  left: 2;
+  padding: 0.625rem 0;
+  font-size: 1.5rem;
+  color: #fff;
+  pointer-events: none;
+  transition: 0.5s;
+}
+
+.box .inputBox input:focus ~ label,
+.box .inputBox input:valid ~ label,
+.box .inputBox input:not([value=""]) ~ label {
+  top: -2.125rem;
+  left: 0;
+  color: #03a9f4;
+  font-size: 1.5rem;
+  margin-top: -3px;
+}
+.box .inputBox input[type="file"]:focus ~ label,
+.box .inputBox input[type="file"]:valid ~ label,
+.box .inputBox input[type="file"]:not([value=""]) ~ label {
+  top: -2.125rem;
+  left: 1;
+  color: #ffffff;
+  font-size: 1.5rem;
+  margin-top: -3px;
+}
+
+
+.box input[type="submit"] {
+  border: none;
+  outline: none;
+  color: #fff;
+  background-color: #03a9f4;
+  padding: 0.625rem 1.25rem;
+  cursor: pointer;
+  border-radius: 0.312rem;
+  font-size: 1.5rem;
+  margin-top: 5px;
+}
+
+.box input[type="submit"]:hover {
+  background-color: #1798d4;
+}
+
+.box .inputBox .body{
+    position: absolute;
+    top: 0;
+    left: 2;
+    padding: 0.625rem 0;
+    font-size: 1.5rem;
+    color: #fff;
+    pointer-events: none;
+    transition: 0.5s;
+  margin-left: -380px;
+}
+.box .inputBox .form-control1:focus ~ label,
+.box .inputBox .form-control1:valid ~ label,
+.box .inputBox .form-control1:not([value=""]) ~ label {
+  top: -2.125rem;
+  left: 1;
+  color: #03a9f4;
+  font-size: 1.5rem;
+  margin-top: -3px;
+
+}
+.box .inputBox .form-control1 {
+
+    width: 100%;
+    padding: 0.625rem 0;
+    font-size: 1.5rem;
+    color: #fff;
+    letter-spacing: 0.062rem;
+    margin-bottom: 1.875rem;
+    border: 1;
+    border-bottom: 0.065rem solid #fff;
+    outline: none;
+    background: transparent;
+    height: 150px;;
+      
+  }
+
+  .input_fields_wrap{
+    max-width: 350px;
+    }
+    .input_fields_wrap input[type=text]{
+     width:100%;
+     margin:2px 0;
+    }
+
+
+
+  

@@ -1,0 +1,13 @@
+
+
+svg {
+	stroke: black;
+	stroke-width: 2.5px;
+	fill: darkgray;
+}
+
+path:hover {
+	fill: limegreen;
+}
+
+
