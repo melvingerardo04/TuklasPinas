@@ -1,0 +1,33 @@
+ {!! Form::open(['action' => ['ProfileController@update', $user->id], 'method' => 'POST', 'enctype' => 'multipart/form-data']) !!}
+            <div class="form-group">
+                {{Form::label('firstName' , 'First Name')}}
+                {{Form::text('firstName',$user->firstName, ['class' => 'form-control' , 'placeholder' => 'FirstName'])}}
+            </div>
+            
+            <div class="form-group">
+                    {{Form::label('middleName' , 'Middle Name')}}
+                    {{Form::text('middleName', $user->middleName , ['class' => 'form-control' , 'placeholder' => 'Middle Name'])}}
+            </div>
+
+            <div class="form-group">
+                {{Form::label('lastName' , 'Last Name')}}
+                {{Form::text('lastName', $user->lastName , ['class' => 'form-control' , 'placeholder' => 'Last Name'])}}
+            </div>
+
+            <div class="form-group">
+                    {{Form::label('birthday' , 'Birthday')}}
+                    {{Form::date('birthday', $user->birthday , ['class' => 'form-control' , 'placeholder' => 'Birthday'])}}
+            </div>
+            <div class="form-group">
+            {{Form::label('gender' , 'Gender')}}
+            {!! Form::select('$user->gender', array('Male' => 'Male', 'Female' => 'Female'), 'Male',['class' => 'form-control']); !!}
+            </div>
+
+            <div class="form-group">
+                    {{Form::label('userType' , 'User Type')}}
+                    {!! Form::select('$user->userType', array('Traveler' => 'Traveler', 'Tourguide' => 'Tourguide'), 'Traveler',['class' => 'form-control']); !!}
+            </div>
+            
+            {{Form::hidden('_method' , 'PUT')}}
+            {{Form::submit('Submit', ['class' => 'btn btn-primary'])}}
+        {!! Form::close() !!}
