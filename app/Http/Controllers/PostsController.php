@@ -181,19 +181,26 @@ class PostsController extends Controller
      */
     public function destroy(Request $request)
     {
+        $result = array("status"=>0,"message"=>"");    
         $var = $request->input();
         $id = $var['id'];
+
         $post = Post::find($id);
-        $post->delete();
         if(auth()->user()->id !==$post->user_id){
-            return redirect ('/posts')->with('error','Unauthorize Page');
+            $result['message'] = "This post can't be delete.";
+            // return redirect ('/posts')->with('error','Unauthorize Page');
         }
-
-        if($post->cover_image !='noimage.jpg'){
-            Storage::delete('public/cover_images/'.$post->cover_image);
+        else {
+            if($post->cover_image !='noimage.jpg'){
+                Storage::delete('public/cover_images/'.$post->cover_image);
+            }
+            $result['status']  = 1;
+            $result['message'] = "Post has been deleted.";
+            $post->delete();
         }
+        return $result;
 
-        return redirect ('/posts')-> with('success', 'Post Remove'); 
+        // return redirect ('/posts')-> with('success', 'Post Remove'); 
     }
 
     public function like($id){

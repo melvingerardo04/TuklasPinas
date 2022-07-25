@@ -2,7 +2,7 @@
 @section('content')
 <center><h1>Posts</h1> </center>
 <div class="col-md-12">
-    <button><i class="fa fa-plus"></i></button>
+    
     <div class="well">
         <div class='row'>
             {{-- <img style="width: 30px; height:30px;border-radius: 50%;" align="left"src="/storage/profiles/{{$post->user->profile_pic}}"> --}}
@@ -17,7 +17,7 @@
                                 <th>Provinces</th>
                                 <th>Itinerary</th>
                                 <th>CreatedBy:</th>
-                                <th>Actions</th>
+                                <th><a href="posts/create" class="btn btn-primary"><i class="fa fa-plus"></i></a ></th>
                             </tr>
                         </thead>
                         <!-- // Table heading END -->
@@ -136,20 +136,9 @@
                 $.ajax({
 					url: "{{ route('viewpost') }}",
 					type: "POST",
-					// dataType : "JSON",
 					data: form_data,
 					success:function(dta){
-                        console.log(dta);
                         $("#mainpage_content").html(dta);
-                        // $("#postID").val(dta.id);
-                        // $("#title").val(dta.title);
-                        // $("#provinces").val(dta.provinces);
-                        // $("#body").val(dta.body);
-                        // // $("#cover_image").val(dta.cover_image);
-                        // $("#modal-info").modal('show');
-                        // console.log(dta.title);
-                        // location.href = "posts/show/";
-                       
 					}
 				});
             });
@@ -167,7 +156,6 @@
                 $.ajax({
 					url: "{{ route('editpost') }}",
 					type: "POST",
-					// dataType : "JSON",
 					data: form_data,
 					success:function(dta){
                         console.log(dta);
@@ -193,18 +181,47 @@
                     name : '_token',
                     value: "{{ csrf_token() }}"
                 });
-                $.ajax({
-					url: "{{ route('destroy') }}",
-					type: "POST",
-					// dataType : "JSON",
-					data: form_data,
-					success:function(dta){
-                        console.log(form_data);
-					}
-				});
+                bootbox.confirm({
+                closeButton: false,
+                onEscape: true,
+                backdrop: true, 
+                message:"Are you sure that you want to delete this data?",
+                callback: function(result) {
+	     			if(result){
+                        $.ajax({
+                            url: "{{ route('destroy') }}",
+                            type: "POST",
+                            data: form_data,
+                            success:function(dta){
+                                console.log(dta);
+                                // bootbox.alert(dta.message);
+                                var rendermessage = "<div class='alert alert-"+(dta.status==1?'success':'danger')+"'>"+(dta.status==1?"":"<strong>Warning!</strong> ") + dta.message + "</div>"
+                                if(dta.status==1) post.fnDraw();
+                                bootbox.dialog({
+                                    message: rendermessage,
+                                    onEscape: true,
+                                    backdrop: true,
+                                    closeButton: false 
+                                    // type: 'light',
+                                    // dismissQueue: true,
+                                    // layout: 'center',
+                                });
+                            }
+                        });
+	     			}
+                }
+	     		});
+               
             });
 	    }
 	});
+    // reset all input
+	$('#modal-info').on('hidden.bs.modal', function () {
+	    $("#Religion").attr("data-id","");
+		$("#Religion").val("");
+		$(".addnew").addClass("hidden");
+		$.notyfy.closeAll();
+	 });
   
     </script>
 {{-- @endpush --}}
