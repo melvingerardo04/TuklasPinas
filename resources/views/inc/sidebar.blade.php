@@ -33,7 +33,7 @@
       <div class="user-panel">
         <div class=" image">
             <a href="/profile">
-                {{-- <img class="profile_pic" style="margin-right:50px;" title="Go to your Profile" id="profile_pic" src="/storage/profiles/{{ Auth::user()->profile_pic}}" /> --}}
+                <img class="profile_pic" style="margin-right:50px;" title="Go to your Profile" id="profile_pic" src="/storage/profiles/{{ Auth::user()->profile_pic}}" />
                 
             </a>
         </div>

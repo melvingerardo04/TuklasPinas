@@ -27,8 +27,10 @@ Route::get('/todoList', 'PagesController@todoList');
 
 //posts
 Route::get('/posts','PostsController@index');
-Route::post('/posts/create','PostsController@store');
-Route::post('editpost','PostsController@edit')->name('editpost');
+Route::post('/posts/create','PostsController@create');
+Route::post('editpost','PostsController@editpost')->name('editpost');
+Route::post('/viewpost','PostsController@viewpost')->name('viewpost');
+Route::post('/posts/update','PostsController@updatepost')->name('updatepost');
 Route::post('destroy','PostsController@destroy')->name('destroy');
 Route::resource('posts', 'PostsController');
 Route::get('postTable','PostsController@postTable')->name('postTable');

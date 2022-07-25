@@ -12,7 +12,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
     <!-- Bootstrap 3.3.2 -->
     <link href="{{ asset("css/bootstrap.min.css") }}" rel="stylesheet" type="text/css" />
     <!-- Font Awesome Icons -->
-    {{-- <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet" type="text/css" /> --}}
+    <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet" type="text/css" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/regular.min.css" crossorigin="anonymous" />
 
 
@@ -52,11 +52,11 @@ scratch. This page gets rid of all links and provides the needed markup only.
     <![endif]-->
   </head>
   <body >
-    <div class="wrapper" >
+    <div class="wrapper" id="mainpage_content" >
 
       <!-- Header -->
-      @include('inc.header')
       
+      @include('inc.header')
       @if(Auth::guest())
      
           <!-- Content Header (Page header) -->

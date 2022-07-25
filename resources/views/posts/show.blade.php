@@ -1,9 +1,9 @@
 @extends('layouts.app')
 
 @section('content')
-    <div class="row">    
+    <div class="row ">    
       
-            <div class="col-md-8 col-md-offset-2" >
+            <div class="col-md-12" >
                 <div class="panel panel-default">
                     <a href="/posts" class="btn btn-default"> Go Back</a>
                     <div class="panel-heading" >  <p><b>{{$post->user->firstName}} {{$post->user->lastName}}  <img style="width: 30px; height:30px;border-radius: 50%;"  align="left"src="/storage/profiles/{{$post->user->profile_pic}}"></b></p>

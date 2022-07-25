@@ -84,7 +84,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
      
 
 <div class="box">
-        <h3 class="login"><img src="storage/img/Login.png" height="50px"></h3>
+        <h3 class="login"><img src="storage/img/Final.png" height="50px"></h3>
             
             <form class="form-horizontal" method="POST" action="{{ route('login') }}">
              {{ csrf_field() }}
