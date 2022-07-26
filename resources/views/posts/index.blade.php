@@ -5,8 +5,12 @@
     
     <div class="well">
         <div class='row'>
-            {{-- <img style="width: 30px; height:30px;border-radius: 50%;" align="left"src="/storage/profiles/{{$post->user->profile_pic}}"> --}}
-            {{-- <h5></h5>  --}}
+            @if ($message = Session::get('success'))
+                <div class="alert alert-success alert-block">
+                    <strong>{{ $message }}</strong>
+                    <button style="margin-top:-25px;" type="button" class="close" data-dismiss="alert">×</button>
+                </div>
+            @endif
             <div class="col-sm-12">
                 <div class="form-group">
                     <table id='post' class="table table-bordered table-condensed table-primary">
@@ -15,9 +19,9 @@
                             <tr>
                                 <th>Title</th>
                                 <th>Provinces</th>
-                                <th>Itinerary</th>
+                                <th>Post</th>
                                 <th>CreatedBy:</th>
-                                <th><a href="posts/create" class="btn btn-primary"><i class="fa fa-plus"></i></a ></th>
+                                <th><a class="btn btn-primary" id="adddata"><i class="fa fa-plus"></i></a ></th>
                             </tr>
                         </thead>
                         <!-- // Table heading END -->
@@ -38,10 +42,10 @@
         <div class="col-md-8 col-md-offset-3"> 
             <div class="panel panel-default">
                 <div class="panel-heading">
-                    <h1> Post</h1>
+                    <h3> Post</h3>
                 </div>
                 <div class="panel-body">
-                {!! Form::open(['action' => 'PostsController@updatepost', 'method' => 'POST', 'enctype' => 'multipart/form-data']) !!}  
+                {!! Form::open(['action' => 'PostsController@savepost', 'method' => 'POST', 'enctype' => 'multipart/form-data','id'=>'form_info']) !!}  
                 <input type="hidden" id="postID" name ="postID" value="">          
                     <div class="form-group col-md-10 col-md-offset-1">
                         {{Form::label('title' , 'Title')}}            
@@ -56,13 +60,15 @@
                     <div class="form-group col-md-10 col-md-offset-1"></div>
                     <div class="form-group col-md-10 col-md-offset-1">
                         {{Form::label('body' , 'Post',['class' =>'body'])}}
-                        {{Form::textarea('body', '' , ['id'=> 'body','class' => 'form-control' ,'required', 'value' => 'Body', 'name' => 'body'])}}        
+                        {{Form::textarea('body', '' , ['id'=> 'body','class' => 'form-control' ,'required', 'value' => 'Body', 'name' => 'body','rows'=>'4'])}}        
                     </div>    
-                    <div class="form-group col-md-10 col-md-offset-1">
+                    <div class="form-group col-md-10 col-md-offset-1" id="photo">
                         {{Form::label('uploadPhoto' , 'Upload Photo')}}
-                        {{Form::file('cover_image',['id'=>'cover_image','name'=>'cover_image'] )}}
+                        {{Form::file('cover_image',['id'=>'cover_image','name'=>'cover_image' ,'onchange' =>'previewFile()'] )}}
+                        <img src="" height="200" alt="Image preview..." id="img">
                     </div>
-                    <div class="form-group col-md-10 col-md-offset-1">  
+                    <div class="form-group col-md-10 col-md-offset-1"> 
+                        <button class="btn btn-danger" id="cancel">Cancel</button> 
                         {{Form::submit('Submit', ['class' => 'btn btn-primary'])}}
                     </div>
                 {!! Form::close() !!}
@@ -81,6 +87,40 @@
     <script src="{{ asset('assets/components/modules/admin/forms/elements/fuelux-checkbox/fuelux-checkbox.js?v=v2.1.0') }}"></script>
     
     <script type="text/javascript">
+
+    function previewFile() {
+
+        var preview = document.querySelector('#img');
+        var file    = document.querySelector('input[type=file]').files[0];
+        var reader  = new FileReader();
+
+        reader.onloadend = function () {
+            preview.src = reader.result;
+        }
+
+        if (file) {
+            reader.readAsDataURL(file);
+        } else {
+            preview.src = "";
+        }
+    }
+    $("#cancel").unbind("click").bind("click",function(){
+        $("#postID").val("");
+        $("#title").attr("data-id","");
+        $("#title").val("");
+		$("#provinces").val("");
+        $("#body").val("");
+        $("#modal-info").modal('hide');
+    });
+    // reset all input
+	$('#modal-info').on('hidden.bs.modal', function () {
+        $("#postID").val("");
+        $("#title").attr("data-id","");
+        $("#title").val("");
+		$("#provinces").val("");
+        $("#body").val("");
+		$.notyfy.closeAll();
+	 });
         function fnInitCompleteCallback(that){
 		var p = that.parent();
     	var l = p.find('label').not('.checkbox-custom');
@@ -160,13 +200,12 @@
 					success:function(dta){
                         console.log(dta);
                         $("#postID").val(dta.id);
+                        $("#title").attr("data-id",dta.id);
                         $("#title").val(dta.title);
                         $("#provinces").val(dta.provinces);
                         $("#body").val(dta.body);
-                        // $("#cover_image").val(dta.cover_image);
+                        $("#photo").html(' <input type="file" id="cover_image" name="cover_image" onchange="previewFile()" ><img id="img" height="200" src='+"storage/cover_images/"+dta.cover_image+' alt="1">')
                         $("#modal-info").modal('show');
-                        // location.href = "posts/edit/";
-                       
 					}
 				});
             });
@@ -182,46 +221,44 @@
                     value: "{{ csrf_token() }}"
                 });
                 bootbox.confirm({
-                closeButton: false,
-                onEscape: true,
-                backdrop: true, 
-                message:"Are you sure that you want to delete this data?",
-                callback: function(result) {
-	     			if(result){
-                        $.ajax({
-                            url: "{{ route('destroy') }}",
-                            type: "POST",
-                            data: form_data,
-                            success:function(dta){
-                                console.log(dta);
-                                // bootbox.alert(dta.message);
-                                var rendermessage = "<div class='alert alert-"+(dta.status==1?'success':'danger')+"'>"+(dta.status==1?"":"<strong>Warning!</strong> ") + dta.message + "</div>"
-                                if(dta.status==1) post.fnDraw();
-                                bootbox.dialog({
-                                    message: rendermessage,
-                                    onEscape: true,
-                                    backdrop: true,
-                                    closeButton: false 
-                                    // type: 'light',
-                                    // dismissQueue: true,
-                                    // layout: 'center',
-                                });
-                            }
-                        });
-	     			}
-                }
+                    closeButton: false,
+                    onEscape: true,
+                    backdrop: true, 
+                    message:"Are you sure that you want to delete this data?",
+                    callback: function(result) {
+                        if(result){
+                            $.ajax({
+                                url: "{{ route('destroy') }}",
+                                type: "POST",
+                                data: form_data,
+                                success:function(dta){
+                                    var rendermessage = "<div class='alert alert-"+(dta.status==1?'success':'danger')+"'>"+(dta.status==1?"":"<strong>Warning!</strong> ") + dta.message + "</div>"
+                                    if(dta.status==1) post.fnDraw();
+                                    bootbox.dialog({
+                                        message: rendermessage,
+                                        onEscape: true,
+                                        backdrop: true,
+                                        closeButton: false 
+                                    });
+                                }
+                            });
+                        }
+                    }
 	     		});
                
             });
 	    }
 	});
-    // reset all input
-	$('#modal-info').on('hidden.bs.modal', function () {
-	    $("#Religion").attr("data-id","");
-		$("#Religion").val("");
-		$(".addnew").addClass("hidden");
-		$.notyfy.closeAll();
-	 });
+    $("#adddata").unbind("click").bind("click",function(){
+        $.notyfy.closeAll();
+        $("#postID").val("");
+        $("#title").attr("data-id","");
+        $("#title").val("");
+        $("#provinces").val("");
+        $("#body").val("");
+        $("#cover_image").attr("src");
+        $("#modal-info").modal('show');
+    });
   
     </script>
 {{-- @endpush --}}

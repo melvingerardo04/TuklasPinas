@@ -50,7 +50,7 @@ class PostsController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function savepost(Request $request)
     {
 
         $this->validate($request,[
@@ -59,8 +59,8 @@ class PostsController extends Controller
             'body' => 'required',
             'cover_image' =>'image|nullable|max:1999'
         ]);
-
-            
+        $result = array("status"=>0,"message"=>""); 
+        $var = $request->all();
         //handle file
         if($request->hasFile('cover_image')){
             //get filename with the extension
@@ -77,17 +77,34 @@ class PostsController extends Controller
         }else{
              $fileNameToStore = "noimage.png";
         }
-        //Create Post 
-        $post = new Post;
-        $post->title = $request->input('title');
-        $post->provinces = $request->input('provinces');
-        $post->body = $request->input('body');
-        $post->user_id = auth()->user()->id;
-        $post->cover_image =$fileNameToStore;
-        $post->save();
-
-        return redirect('/posts')->with('success', 'Post Created');
-        //return response()->json9(['uploaded'=>'/posts/'.$imageName]);
+        if (empty($var['postID'])) {
+            //Create Post 
+            $post = new Post;
+            $post->title = $request->input('title');
+            $post->provinces = $request->input('provinces');
+            $post->body = $request->input('body');
+            $post->user_id = auth()->user()->id;
+            $post->cover_image =$fileNameToStore;
+            $post->save();
+            return redirect('/posts')->with('success', 'Post has been Saved.');
+        }
+        else {
+            // Update Post
+            $post = Post::find($var['postID']);
+            $post->title = $var['title'];
+            $post->provinces = $request->input('provinces');
+            $post->body = $var['body'];
+            if (!empty($post->cover_image)&& empty($request->hasFile('cover_image'))) {
+                $post->cover_image = $post->cover_image;
+            }
+            else {
+                $post->cover_image =$fileNameToStore;
+            }
+            $post->save();
+            $result['status']  = 1;
+            $result['message'] = "Post has been Updated.";
+            return redirect('/posts')->with('success', 'Post has been Updated.');
+        }
     }   
 
     /**
@@ -191,7 +208,7 @@ class PostsController extends Controller
             // return redirect ('/posts')->with('error','Unauthorize Page');
         }
         else {
-            if($post->cover_image !='noimage.jpg'){
+            if($post->cover_image !='noimage.png'){
                 Storage::delete('public/cover_images/'.$post->cover_image);
             }
             $result['status']  = 1;

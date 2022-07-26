@@ -43,8 +43,8 @@
    
   
 <!-- Header Navbar -->
- <a class="logo" href="{{ url('/home') }}"height="55px" width="220px;" style="position:fixed;background-color:black;background-color:#003333">
-  <img src="/img/Final.png" height="45px" width="225px" style="margin-left:-14px;">
+ <a class="logo" href="{{ url('/home') }}" width="220px;" style="position:fixed;height:52px;background-color:#666666">
+  <img src="/img/Final.png" height="46px" width="225px" style="margin-left:-14px;">
 
  </a>
           
