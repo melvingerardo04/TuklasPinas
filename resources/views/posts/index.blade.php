@@ -1,6 +1,6 @@
 @extends('layouts.app')
 @section('content')
-<center><h1>Posts</h1> </center>
+<center><h1>Post</h1> </center>
 <div class="col-md-12">
     
     <div class="well">
