@@ -31,7 +31,7 @@
                 
                 <div class="form-group col-md-10 col-md-offset-1"></div>
                 <div class="form-group col-md-10 col-md-offset-1">
-                    {{Form::label('body' , 'Itinerary',['class' =>'body'])}}
+                    {{Form::label('body' , 'Post',['class' =>'body'])}}
                     {{Form::textarea('body', '' , ['id'=> 'body','class' => 'form-control' ,'required', 'value' => 'Body', 'name' => 'body'])}}        
                 </div>    
                 <div class="form-group col-md-10 col-md-offset-1">

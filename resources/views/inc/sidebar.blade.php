@@ -23,7 +23,7 @@
     @else
 <!-- Left side column. contains the sidebar -->
 
-<aside class="main-sidebar" style="position:fixed;background-color:#003333;">
+<aside class="main-sidebar" style="position:fixed;background-color:#666666;">
    
     <!-- sidebar: style can be found in sidebar.less -->
     <section class="sidebar">
@@ -33,7 +33,7 @@
       <div class="user-panel">
         <div class=" image">
             <a href="/profile">
-                {{-- <img class="profile_pic" style="margin-right:50px;" title="Go to your Profile" id="profile_pic" src="/storage/profiles/{{ Auth::user()->profile_pic}}" /> --}}
+                <img class="profile_pic" style="margin-right:50px;" title="Go to your Profile" id="profile_pic" src="/storage/profiles/{{ Auth::user()->profile_pic}}" />
                 
             </a>
         </div>
@@ -63,7 +63,7 @@
         <!-- Optionally, you can add icons to the links -->
         <li class="active"><a href="/home"> <span style="font-family: No.SevenRegular;">Home</span>
         <li><a href="/posts"><span>Posts</span></a></li>
-        <li><a href="/posts/create"> <span >Create Posts</span></a></li></a></li>
+        {{-- <li><a href="/posts/create"> <span >Create Posts</span></a></li></a></li> --}}
         <li><a href="/itineraries"> <span >Itineraries</span></a></li></a></li>
         <li><a href="/itineraries/create"> <span >Create Itinerary</span></a></li></a></li>
         <li><a href="/todoList"> <span >To-do List</span></a></li></a></li>

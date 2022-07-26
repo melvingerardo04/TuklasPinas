@@ -1,13 +1,17 @@
 @extends('layouts.app')
 
 @section('content')
+<br>
+<div class="pull-right">
+    <a href="/posts" class="btn btn-danger "> Go Back</a>
+</div>
+
     <div class="row">    
-      
-            <div class="col-md-8 col-md-offset-2" >
+        <div class="col-md-12" >
+            <br>
                 <div class="panel panel-default">
-                    <a href="/posts" class="btn btn-default"> Go Back</a>
                     <div class="panel-heading" >  <p><b>{{$post->user->firstName}} {{$post->user->lastName}}  <img style="width: 30px; height:30px;border-radius: 50%;"  align="left"src="/storage/profiles/{{$post->user->profile_pic}}"></b></p>
-                        @if(Auth::user()-> id == $post->user_id) 
+                        {{-- @if(Auth::user()-> id == $post->user_id) 
                        
                   
                         <ul class="dropdown tasks-menu pull-right" style="margin-top:-30px;">
@@ -23,7 +27,7 @@
                                 {!!Form::close()!!}
                             </li>
                         </ul>
-                        @endif
+                        @endif --}}
                     </div>
                         <div class="panel-body">
                             <b>  {{$post->provinces}}</b>        

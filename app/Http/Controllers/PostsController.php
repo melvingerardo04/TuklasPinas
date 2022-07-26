@@ -50,7 +50,7 @@ class PostsController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function savepost(Request $request)
     {
 
         $this->validate($request,[
@@ -59,8 +59,8 @@ class PostsController extends Controller
             'body' => 'required',
             'cover_image' =>'image|nullable|max:1999'
         ]);
-
-            
+        $result = array("status"=>0,"message"=>""); 
+        $var = $request->all();
         //handle file
         if($request->hasFile('cover_image')){
             //get filename with the extension
@@ -77,17 +77,34 @@ class PostsController extends Controller
         }else{
              $fileNameToStore = "noimage.png";
         }
-        //Create Post 
-        $post = new Post;
-        $post->title = $request->input('title');
-        $post->provinces = $request->input('provinces');
-        $post->body = $request->input('body');
-        $post->user_id = auth()->user()->id;
-        $post->cover_image =$fileNameToStore;
-        $post->save();
-
-        return redirect('/posts')->with('success', 'Post Created');
-        //return response()->json9(['uploaded'=>'/posts/'.$imageName]);
+        if (empty($var['postID'])) {
+            //Create Post 
+            $post = new Post;
+            $post->title = $request->input('title');
+            $post->provinces = $request->input('provinces');
+            $post->body = $request->input('body');
+            $post->user_id = auth()->user()->id;
+            $post->cover_image =$fileNameToStore;
+            $post->save();
+            return redirect('/posts')->with('success', 'Post has been Saved.');
+        }
+        else {
+            // Update Post
+            $post = Post::find($var['postID']);
+            $post->title = $var['title'];
+            $post->provinces = $request->input('provinces');
+            $post->body = $var['body'];
+            if (!empty($post->cover_image)&& empty($request->hasFile('cover_image'))) {
+                $post->cover_image = $post->cover_image;
+            }
+            else {
+                $post->cover_image =$fileNameToStore;
+            }
+            $post->save();
+            $result['status']  = 1;
+            $result['message'] = "Post has been Updated.";
+            return redirect('/posts')->with('success', 'Post has been Updated.');
+        }
     }   
 
     /**
@@ -97,8 +114,10 @@ class PostsController extends Controller
      * @return \Illuminate\Http\Response
      */
 
-    public function show($id)
+    public function viewpost(Request $request)
     {
+        $var = $request->input();
+        $id = $var['id'];
         $post = Post::find($id);
         $likePost = Post::find($id);
         $likeCtr = Like::where(['post_id' => $likePost->id])->count();
@@ -114,17 +133,19 @@ class PostsController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function editpost(Request $request)
     {
-        $post = Post::find($id);
+        $var = (object) $request->all();
 
+        $post = Post::where("id",$var->id)->first();
 
-        if(auth()->user()->id !==$post->user_id){
+        if(auth()->user()->id != $post->user_id){
+           
             return redirect ('/posts')->with('error','Unauthorize Page');
+        }else{
+            return  $post;
         }
 
-
-        return view('posts.edit')->with('post', $post);
     }
 
     /**
@@ -134,7 +155,7 @@ class PostsController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function updatepost(Request $request)
     {
         $this->validate($request,[
             'title' => 'required',
@@ -157,7 +178,7 @@ class PostsController extends Controller
         }  
         
         //Create Post 
-        $post = Post::find($id);
+        $post = Post::find($request->input('postID'));
         $post->title = $request->input('title');
         $post->provinces = $request->input('provinces');
         $post->body = $request->input('body');
@@ -177,17 +198,26 @@ class PostsController extends Controller
      */
     public function destroy(Request $request)
     {
+        $result = array("status"=>0,"message"=>"");    
+        $var = $request->input();
+        $id = $var['id'];
+
         $post = Post::find($id);
-        $post->delete();
         if(auth()->user()->id !==$post->user_id){
-            return redirect ('/posts')->with('error','Unauthorize Page');
+            $result['message'] = "This post can't be delete.";
+            // return redirect ('/posts')->with('error','Unauthorize Page');
         }
-
-        if($post->cover_image !='noimage.jpg'){
-            Storage::delete('public/cover_images/'.$post->cover_image);
+        else {
+            if($post->cover_image !='noimage.png'){
+                Storage::delete('public/cover_images/'.$post->cover_image);
+            }
+            $result['status']  = 1;
+            $result['message'] = "Post has been deleted.";
+            $post->delete();
         }
+        return $result;
 
-        return redirect ('/posts')-> with('success', 'Post Remove'); 
+        // return redirect ('/posts')-> with('success', 'Post Remove'); 
     }
 
     public function like($id){
@@ -231,7 +261,8 @@ class PostsController extends Controller
      }
     public function postTable(Request $request){
         $var = (object) $request->all();
-
+        // dd($var);
+        // $return['_token'] = $var->_token;
         $rsql   = Post::select("posts.id","title","provinces","body",DB::raw('CONCAT(u.lastName,", ", u.firstName, " ", u.middleName) AS FullName'))->leftjoin("users as u","u.id","=","posts.user_id");
         
         $return['iTotalRecords'] = 0;
@@ -263,8 +294,8 @@ class PostsController extends Controller
             $provinces = "<p>".$key['row']->provinces."</p>";
             $body = "<p>".$key['row']->body."</p>";
             $fullName = "<p>".$key['row']->FullName."</p>";
-            $actions = "<button data-id='{$key['row']->id}' class='btn btn-success' id=".$key['row']->id."> <i class='fa    fa-edit'> </i></button>
-                          <button data-id='{$key['row']->id}' class='btn btn-danger' id=".$key['row']->id."> <i class='fa fa-trash'> </i></button>";
+            $actions = "<a data-id='{$key['row']->id}' class='btn btn-warning'> <i class='fa fa-eye'> </i></a>   <button name='editPost' data-id='{$key['row']->id}' class='btn btn-success editPost'value= '{$key['row']->id}'> <i class='fa fa-edit'> </i></button>
+                        <button data-id='{$key['row']->id}' class='btn btn-danger'> <i class='fa fa-trash'> </i></button> ";
 
 
             // $title = implode("",$title);
@@ -275,7 +306,7 @@ class PostsController extends Controller
             $num++;
             $return['iTotalRecords'] = $num;
             if (!empty($title)) {
-                $array[$list] = array(
+                $array[$list] = array(     
                     $title,
                     $provinces,
                     $body,
@@ -285,6 +316,7 @@ class PostsController extends Controller
             }
         
         }
+        $return['var']= $var;
         $return['aaData'] = array_slice($array,0,$num);
 // dd($return);
         return $return;
