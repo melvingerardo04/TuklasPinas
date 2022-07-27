@@ -22,8 +22,23 @@ class ItineraryController extends Controller
      */
     public function index(Request $request)
     {
-        $itineraries = Itineraries::orderBy('provinces_id','asc')->paginate(10);
-    return view('itineraries.index',compact('itineraries'))-> with ('itineraries', $itineraries);  
+        $var =[];
+        $provinces = DB::table("provinces as p")
+        ->select("p.id","p.provinces_name","p.days1","p.nights","p.budget","i.places")
+        ->leftjoin("itineraries as i","i.provinces_id","p.id")
+        ->get();
+        $places = [];
+        // dd($provinces);
+        $id= "";
+        $array = [];
+        foreach ($provinces as $key => $province) {
+            $var['places'][$province->id] = $province;
+            $var['array'][$province->id][] = $province->places;
+        }
+        // ->paginate(10);
+// dd($var);
+        
+    return view('itineraries.index',compact('itineraries'))->with('var', $var);  
         // $provinces=Provinces::all();
         //return view('itineraries.index');
     }
