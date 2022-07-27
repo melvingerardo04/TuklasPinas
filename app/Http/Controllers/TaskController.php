@@ -21,10 +21,17 @@ class TaskController extends Controller
         $user = Auth::user();
         $user_id =auth()->user()->id;
         $user = User::find($user_id);
-        $tasks = Task::where("iscompleted", false)->orderBy("id", "desc")->get();
+        $tasks = Task::where("iscompleted", 0)->orderBy("id", "desc")->get();
         $completed_tasks = Task::where("iscompleted", true)->get();
-       
-        return view('pages.todoList',compact('user',$user,'tasks', 'completed_tasks'))->with('tasks', $user->tasks);
+        // dd($user->tasks);
+    
+        $var['user'] = User::find($user_id);
+        $var['waitList'] = Task::where("iscompleted", 0)->orderBy("id", "desc")->get();
+        $var['completeList'] = Task::where("iscompleted", 1)->get();
+
+        // dd($var);
+
+        return view('pages.todoList',compact('var',$var))->with('var',$var);
         }
         
         public function store(Request $request)
@@ -33,6 +40,7 @@ class TaskController extends Controller
             $task = new Task();
             $task->user_id = auth()->user()->id;
             $task->task = request("task");
+            $task->iscompleted = 0;
             $task->save();
             return Redirect::back()->with("message", "Task has been added");
         
