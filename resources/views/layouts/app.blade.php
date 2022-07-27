@@ -41,7 +41,13 @@ scratch. This page gets rid of all links and provides the needed markup only.
         height: 100px;
         border-radius: 50%;
         margin-left: 50px;
-       } 
+       }
+      .content{
+        width: 100%;
+        /* height: calc(100% - 100px); */
+        /* background-color: #bbb; */
+        overflow: auto;
+      } 
     </style>
 
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
