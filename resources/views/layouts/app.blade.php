@@ -48,6 +48,14 @@ scratch. This page gets rid of all links and provides the needed markup only.
         /* background-color: #bbb; */
         overflow: auto;
       } 
+      html{
+        scroll-behavior: smooth;
+      }
+      .container {
+        display: flex;
+        align-items: center;
+        justify-content: center
+      }
     </style>
 
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->

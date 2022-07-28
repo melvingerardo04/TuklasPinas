@@ -6,6 +6,9 @@ use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\URL;   
 use TuklasPinas\User;
+use TuklasPinas\Post;
+use TuklasPinas\Like;
+use TuklasPinas\Dislike;
 use Auth;
 class ProfileController extends Controller
 {
@@ -19,7 +22,15 @@ class ProfileController extends Controller
         $user = Auth::user();
         $user_id =auth()->user()->id;
         $user = User::find($user_id);
-        return view('users.profile',compact('user',$user))->with('posts', $user->posts);
+        $post = Post::where("user_id",$user->id)->get();
+        $getLikes = [];
+        $getDisLikes = [];
+        foreach ($post as $key) {
+            $getLikes[$key->id] = Like::where(['post_id' => $key->id])->count();
+            $getDisLikes[$key->id] = DisLike::where(['post_id' => $key->id])->count();
+        }
+        // dd($getLikes);
+        return view('users.profile',compact('user',$user),['getLikes' =>$getLikes, 'getDisLikes' =>$getDisLikes])->with('posts', $user->posts);
     }
 
     public function updateProfile(Request $request){

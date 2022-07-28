@@ -232,10 +232,10 @@ class PostsController extends Controller
            $like->email= $email;
            $like->post_id = $post_id;
            $like->save();
-           return redirect ("/posts/{$id}");
+           return back();
         }
         else{
-            return redirect ("/posts");
+            return back();
         }
 
     }
@@ -252,10 +252,10 @@ class PostsController extends Controller
             $dislike->email= $email;
             $dislike->post_id = $post_id;
             $dislike->save();
-            return redirect ("/posts/{$id}");
+            return back();
         }
         else{
-            return redirect ("/posts");
+            return back();
         }
  
      }
