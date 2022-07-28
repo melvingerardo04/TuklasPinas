@@ -10,6 +10,7 @@ use TuklasPinas\Post;
 use TuklasPinas\Like;
 use TuklasPinas\Dislike;
 use Auth;
+use Helpers;
 class ProfileController extends Controller
 {
     public function __construct()
@@ -26,10 +27,10 @@ class ProfileController extends Controller
         $getLikes = [];
         $getDisLikes = [];
         foreach ($post as $key) {
+            $post = Helpers::post($key->id);
             $getLikes[$key->id] = Like::where(['post_id' => $key->id])->count();
             $getDisLikes[$key->id] = DisLike::where(['post_id' => $key->id])->count();
         }
-        // dd($getLikes);
         return view('users.profile',compact('user',$user),['getLikes' =>$getLikes, 'getDisLikes' =>$getDisLikes])->with('posts', $user->posts);
     }
 
