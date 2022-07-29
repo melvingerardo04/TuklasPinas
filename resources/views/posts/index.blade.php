@@ -1,6 +1,31 @@
 @extends('layouts.app')
 @section('content')
 <center><h1>Post</h1> </center>
+
+<div class=" col-md-12">
+    <div class="well">
+        <div class="row">
+            <div class="col-sm-2">
+                <label for="title">Title</label>
+                <input type="text" id="searchtitle" name="searchtitle" class="form-control">
+            </div>
+            <div class="col-sm-2">
+                <label for="provinces">Provinces</label>
+                <input type="text" name="searchprovinces" id="searchprovinces" class="form-control">
+            </div>
+            <div class="col-sm-3">
+                <label for="user">User</label>
+                @php
+		        echo Form::select('user', Helpers::userList('',true,true), null, array('class' => 'form-control','id' => 'user'));
+		        @endphp 
+            </div>
+            <div class="col-sm-1">
+                <label for="">&nbsp; </label>
+                <a class="btn btn-warning form-control" id='search'><i class='fa fa-search'></i></a>
+            </div>
+        </div>
+    </div>
+</div>
 <div class="col-md-12">
     
     <div class="well">
@@ -17,6 +42,7 @@
                         <!-- Table heading -->
                         <thead>
                             <tr>
+                                <th></th>
                                 <th>Title</th>
                                 <th>Provinces</th>
                                 <th>Post</th>
@@ -146,6 +172,11 @@
 		"fnInitComplete": function () {
 	    	fnInitCompleteCallback(this);
         },
+        "fnServerParams": function ( aoData ) {
+            aoData.push( { "name": "title", "value": $("[name=searchtitle]").val() } );
+            aoData.push( { "name": "provinces", "value": $("[name=searchprovinces]").val() } );
+            aoData.push( { "name": "user", "value": $("[name=user]").val() } );
+        },
 	    "aoColumnDefs": [
           { 'sClass':'col-md-1', 'aTargets': [ 0 ] },
         //   { 'sClass':'col-md-1', 'aTargets': [ 4 ] },
@@ -259,6 +290,9 @@
         $("#cover_image").attr("src");
         $("#modal-info").modal('show');
     });
+    $("#search").click(function(){
+		post.fnDraw();
+	});
   
     </script>
 {{-- @endpush --}}
