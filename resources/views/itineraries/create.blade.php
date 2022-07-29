@@ -1,16 +1,29 @@
 @extends('layouts.app')
 @section('content')
 
-<div class="panel panel-footer" style="margin-top:50px;">
+<div class="panel panel-default" style="margin-top:50px;">
     {!! Form::open(['action' => 'ItineraryController@store', 'method' => 'POST', 'enctype' => 'multipart/form-data']) !!} 
-        <div class="panel panel-footer" style="margin-top:50px;">
-            <center><label for="Range" value="range" name="range">Range</label></center>
-            <input type="text" name="days1" class="col-md-1" required style="margin-left:400px;" placeholder="Days" autocomplete="off">
-            <input type="text" name="nights" class="col-md-1" required style="margin-left:100px;" placeholder="Nights" autocomplete="off">
+        <div class="panel-heading">
+            <h1 class="text-center">Create Itinerary</h1>
+        </div>
+        <div class="panel-body">
+            <div class="row col-md-12">
+                <div class="form-group ">
+                    <div class="col-md-2 col-md-offset-4 text-center">
+                        <label for="days1" value="days1" name="days1">Days</label>
+                        <input type="number" name="days1" class="col-md-1  form-control" required placeholder="Days" autocomplete="off">
+                    </div>
+                    <div class="col-md-2 text-center" >
+                        <label for="nights" value="nights" name="nights">Nights</label>
+                        <input type="number" name="nights" class="col-md-1 form-control"placeholder="Nights" autocomplete="off">
+                    </div>
+                </div>
+            </div>
+            <br>
             <table class="table table-bordered" style="margin-top:50px;">
                 <thead>
                     <tr> 
-                        <th> Provinces</th>
+                        <th> Provinces/Cities/Countries</th>
                         <th><input type="text" name="provinces_name" class="form-control" required autocomplete="off"></th>
                         <th></th>
                         <th>Budget</th>
@@ -20,7 +33,7 @@
                         <th>Days</th>
                         <th>Places</th>
                         <th>Time</th>
-                        <th>Activities</th>
+                        <th>Stories</th>
                         <th>Other Expenses</th>  
                         <th><a href="#" class="addRow"><i class="glyphicon glyphicon-plus" style="color:black;font-size:20px;width:5px;"></i></a></th>   
                     </tr>
@@ -30,7 +43,7 @@
                         <td><input type="text" name="days[]" class="form-control" required autocomplete="off"></td>
                         <td><input type="text" name="places[]" class="form-control" required></td>
                         <td><input type="time" name="time[]" class="form-control" required></td>
-                        <td><input type="text" name="activities[]" class="form-control" required></td>
+                        <td><textarea name="activities[]" class="form-control" rows="1" required></textarea></td>
                         <td><input type="text" name="expenses[]" class="form-control expenses" autocomplete="off" required></td>
                         <td><a href="#" class="btn btn-danger remove">X</a></td>
                     </tr>
@@ -41,7 +54,7 @@
                         <td style="border: none"></td>
                         <td style="border: none"></td>
                         <td> Total</td>
-                        <td> <b class="total"></b></td>
+                        <td class="text-right"> <b class="total ">0.00</b></td>
                         <td> <input class="btn btn-success" type="submit" name="" value="Submit"></td>     
                     </tr>
                 </tfoot>
@@ -78,7 +91,7 @@ function total(){
         '<td><input type="text" name="days[]" class="form-control" required ></td>'+
         '<td><input type="text" name="places[]" class="form-control" required></td>'+
         '<td><input type="time" name="time[]" class="form-control" required></td>'+
-        '<td><input type="text" name="activities[]" class="form-control" required></td>'+
+        '<td><textarea name="activities[]" class="form-control" rows="1" required></textarea></td>'+
         '<td><input type="text" name="expenses[]" class="form-control expenses" autocomplete="off" required></td>'+
         '<td><a href="#" class="btn btn-danger remove">X</a></td>'+
         '</tr>';
