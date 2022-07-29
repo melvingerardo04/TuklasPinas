@@ -9,6 +9,7 @@ use TuklasPinas\Like;
 use TuklasPinas\Dislike;
 use Auth;
 use DB;
+use Helpers;
 
 class PostsController extends Controller
 {
@@ -261,64 +262,46 @@ class PostsController extends Controller
      }
     public function postTable(Request $request){
         $var = (object) $request->all();
-        // dd($var);
-        // $return['_token'] = $var->_token;
+        $columns = array(
+            array( 'db' => 'id', 'dt' => 0,'orderable' => false, 'sortnum'=>true),
+            array( 'db' => 'title', 'dt' => 1 ),
+            array( 'db' => 'provinces', 'dt' => 2 ),
+            array( 'db' => 'body', 'dt' => 3 ),
+            array( 'db' => 'FullName', 'dt' => 4 ),
+            array( 'db' => 'id', 'dt' => 5,'formatter' => function($d,$mrow){
+                return "<div class='btn-group btn-group-sm'>
+                <a data-id='{$d}' class='btn btn-warning'><i class='fa fa-eye'></i></a>
+                <a data-id='{$d}' class='btn btn-success'><i class='fa fa-edit'></i></a>
+                <a data-id='{$d}' class='btn btn-danger'><i class='fa fa-trash'></i></a>
+                </div>";
+            },'orderable' => false)
+        );
+        # This is for extra condition
+        $where = array();
+    
+        $result = array("aaData"=>array(),"sEcho"=>(int)$var->sEcho,"iTotalDisplayRecords"=>0,"iTotalRecords"=>0); 
+
         $rsql   = Post::select("posts.id","title","provinces","body",DB::raw('CONCAT(u.lastName,", ", u.firstName, " ", u.middleName) AS FullName'))->leftjoin("users as u","u.id","=","posts.user_id");
-        
-        $return['iTotalRecords'] = 0;
-        $return['iTotalDisplayRecords'] = 0;
-        $return['iTotalRecords'] = $rsql->count();
-        if($request['iDisplayLength'] > 0){
-            $rsql = $rsql->skip(intval($request->iDisplayStart))->take(intval($request->iDisplayLength));
+        if (!empty($var->title)) {
+            $rsql = $rsql->where("title",$var->title);
         }
-        $return['iTotalDisplayRecords'] =  $return['iTotalRecords'];
-
-        $rsql = $rsql->get();
-        // dd($rsql);
-
-        $post = [];
-        foreach ($rsql as $row => $key) {
-            $post[$row] = array(
-                'row' => $key,
-            );
+        if (!empty($var->provinces)) {
+            $rsql = $rsql->where("provinces",$var->provinces);
+        }
+        if (!empty($var->user)) {
+            $rsql = $rsql->where("user_id",$var->user);
         }
 
-        $array = [];
-        $title = [];
-        $provinces = [];
-        $fullName = [];
-        $actions = [];
-        $num = 0;
-        foreach ($post as $list => $key) {
-            $title = "<p>".$key['row']->title."</p>";
-            $provinces = "<p>".$key['row']->provinces."</p>";
-            $body = "<p>".$key['row']->body."</p>";
-            $fullName = "<p>".$key['row']->FullName."</p>";
-            $actions = "<a data-id='{$key['row']->id}' class='btn btn-warning'> <i class='fa fa-eye'> </i></a>   <button name='editPost' data-id='{$key['row']->id}' class='btn btn-success editPost'value= '{$key['row']->id}'> <i class='fa fa-edit'> </i></button>
-                        <button data-id='{$key['row']->id}' class='btn btn-danger'> <i class='fa fa-trash'> </i></button> ";
-
-
-            // $title = implode("",$title);
-            // $provinces = implode("",$provinces);
-            // $body = implode("",$body);
-            // $fullName = implode("",$fullName);
-            // $actions = implode("",$actions);
-            $num++;
-            $return['iTotalRecords'] = $num;
-            if (!empty($title)) {
-                $array[$list] = array(     
-                    $title,
-                    $provinces,
-                    $body,
-                    $fullName,
-                    $actions,
-                );
-            }
-        
-        }
-        $return['var']= $var;
-        $return['aaData'] = array_slice($array,0,$num);
-// dd($return);
-        return $return;
+        $likes = array(
+            "posts.id",
+            "posts.title"
+        );  
+        $params = array(
+            "var" => $var,
+            "columns" => $columns,
+            "likes" => $likes,
+            "sql" => $rsql
+        );
+        Helpers::process_dt_array($params);
     }
 }
