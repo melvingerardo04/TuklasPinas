@@ -34,6 +34,7 @@
                         <th>Places</th>
                         <th>Time</th>
                         <th>Stories</th>
+                        <th>Images</th>
                         <th>Other Expenses</th>  
                         <th><a href="#" class="addRow"><i class="glyphicon glyphicon-plus" style="color:black;font-size:20px;width:5px;"></i></a></th>   
                     </tr>
@@ -44,6 +45,7 @@
                         <td><input type="text" name="places[]" class="form-control" required></td>
                         <td><input type="time" name="time[]" class="form-control" required></td>
                         <td><textarea name="activities[]" class="form-control" rows="1" required></textarea></td>
+                        <td><input type="file" name="images[]" class="form-control" required multiple></td>
                         <td><input type="text" name="expenses[]" class="form-control expenses" autocomplete="off" required></td>
                         <td><a href="#" class="btn btn-danger remove">X</a></td>
                     </tr>
@@ -92,6 +94,7 @@ function total(){
         '<td><input type="text" name="places[]" class="form-control" required></td>'+
         '<td><input type="time" name="time[]" class="form-control" required></td>'+
         '<td><textarea name="activities[]" class="form-control" rows="1" required></textarea></td>'+
+        '<td><input type="file" name="images[]" class="form-control" required multiple></td>'+
         '<td><input type="text" name="expenses[]" class="form-control expenses" autocomplete="off" required></td>'+
         '<td><a href="#" class="btn btn-danger remove">X</a></td>'+
         '</tr>';

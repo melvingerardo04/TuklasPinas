@@ -24,7 +24,7 @@ class ItineraryController extends Controller
     {
         $var =[];
         $provinces = DB::table("provinces as p")
-        ->select("p.id","p.provinces_name","p.days1","p.nights","p.budget","i.places")
+        ->select("p.id","p.provinces_name","p.days1","p.nights","p.budget","i.places","i.images")
         ->leftjoin("itineraries as i","i.provinces_id","p.id")
         ->get();
         $places = [];
@@ -62,18 +62,38 @@ class ItineraryController extends Controller
      */
     public function store(Request $request)
     {
+            // dd($request->all());
         $data = new Provinces;
         $data->user_id = auth()->user()->id;
         $data->provinces_name = $request->input('provinces_name');
         $data->days1 = $request->input('days1');
         $data->nights = $request->input('nights');
         $data->budget = $request->input('budget');
-        $data->save();
+        // $data->save();
        
-        
         $lastid=$data->id;
         if(count($request->days)>0){
+            $fileNameToStore = [];
+            dd($request->all());
             foreach($request->days as $itinerary=>$v){
+                if($request->hasFile('images')){
+                    $images = $request->images;
+                    foreach ($images as $key => $value) {
+                    //get filename with the extension
+                    $filenameWithExt = $value->getClientOriginalName();
+                    //get just filename
+                    $filename =pathInfo($filenameWithExt, PATHINFO_FILENAME);
+                    //get just ext    
+                    $extension = $value->getClientOriginalExtension();
+                    //filename to store
+                    $fileNameToStore[$key]=$filename.'_'.time().'.'.$extension;
+                    //upload image
+                    $path = $value->storeAs('public/itineraryImages',$fileNameToStore[$key]);
+                    
+                }
+                $saveImage[$itinerary] = implode(",",$fileNameToStore[$key]);
+                dd($saveImage);
+                }
             $data2=array(
                 'provinces_id'=>$lastid,
                 'days'=>$request->days[$itinerary],
@@ -81,12 +101,14 @@ class ItineraryController extends Controller
                 'time'=>$request->time[$itinerary],
                 'activities'=>$request->activities[$itinerary],
                 'expenses'=>$request->expenses[$itinerary],
+                'images'=>$saveImage[$itinerary],
                 
             );
-            
-            Itineraries::insert($data2);
+           
+            // Itineraries::insert($data2);
            
         }
+        dd($data);
         }
         return redirect('/itineraries')->with('success', 'Itineraries Created');
 
@@ -101,7 +123,10 @@ class ItineraryController extends Controller
      */
     public function show($id)
     {
-        $itineraries= Itineraries::where('provinces_id', '=', $id)->get();
+        $itineraries= Itineraries::where('p.id', '=', $id)
+        ->leftjoin("provinces as p","p.id","itineraries.provinces_id")
+        ->get();
+
         return view('itineraries.show',compact('itineraries'));
     }
 

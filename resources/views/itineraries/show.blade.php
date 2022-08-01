@@ -1,42 +1,64 @@
 @extends('layouts.app')
-@include('inc.map')
+{{-- @include('inc.map') --}}
 @section('content')
-    <div class="panel panel-footer" style="margin-top:50px;margin-left:400px;">
-        <table class="table table-bordered">
-            <thead>
-                <tr>
-                    <th> SL</th>
-                    <th>Place </th>
-                    <th>Days </th>
-                    <th>Time </th>
-                    <th>Activities </th>
-                    <th>Expenses </th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach ($itineraries as $key=>$itinerary)
-                    <tr>
-                        <td> {{++$key}}</td>
-                        
-                        <td>{{$itinerary->places}}</td>
-                        <td>{{$itinerary->days}}</td>
-                        <td>{{$itinerary->time}}</td> 
-                        <td>{{$itinerary->activities}}</td> 
-                        <td>{{$itinerary->expenses}}.00</td> 
-                    </tr>  
+<style>
+    #itineraryImages{
+        height:150px;
+       width:200px;
+    }
+</style>
+<div class="pull-right">
+    <a href="/itineraries" class="btn btn-danger "> Go Back</a>
+</div>
+    @foreach ($itineraries as $itinerary)
+        @php
+            // dd($itinerary->images);
+            $arrayImages = explode(",",$itinerary->images);
+        @endphp
+    <div class="row">
+        <div class="col-md-12">
+          <!-- The time line -->
+          <ul class="timeline">
+            <!-- timeline time label -->
+            <li class="time-label">
+              <span class="bg-red">
+                {{$itinerary->places}}
+              </span>
+            </li>
+            <!-- /.timeline-label -->
+            <!-- timeline item -->
+            <li>
+              <i class="fa  bg-blue">{{$itinerary->days}}</i>
+              <div class="timeline-item">
+                <span class="time"><i class="fa fa-clock-o"></i> {{$itinerary->time}}</span>
+                <h3 class="timeline-header"><i class="fa fa-money">{{$itinerary->expenses}}</i></h3>
+                <div class="timeline-body">
+                  <p>{{$itinerary->activities}}</p>
+                </div>
+                <div class='timeline-footer'>
+                  <a class="btn btn-primary btn-xs">Read more</a>
+                  <a class="btn btn-danger btn-xs">Delete</a>
+                </div>
+              </div>
+            </li>
+            <!-- END timeline item -->
+            <!-- timeline item -->
+            <li>
+              <i class="fa fa-picture-o bg-aqua"></i>
+              <div class="timeline-item" >
+                @foreach ($arrayImages as $item)
+                    <img id="itineraryImages" src="/storage/itineraryImages/{{!empty($item)?$item:"Final.png"}}" >
                 @endforeach
-            </tbody>
-            <tfoot>
-                <tr>
-                    <td style="border: none"></td>
-                    <td style="border: none"></td>
-                    <td style="border: none"></td>
-                    <td style="border: none"></td>
-                    <td style="border: none"></td>
-                    <td> Total</td>
-                    <td> <b class="total"></b></td>    
-                </tr>
-            </tfoot>
-        </table>
-    </div> 
+              </div>
+            </li>
+            <!-- END timeline item -->
+            <!-- timeline item -->
+          </ul>
+        </div><!-- /.col -->
+      </div><!-- /.row -->
+    @endforeach
+
+
+    </section><!-- /.content -->
+  </div><!-- /.content-wrapper -->
 @endsection
