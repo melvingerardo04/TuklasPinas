@@ -22,6 +22,7 @@ class CreateItinerariesTable extends Migration
             $table->string('time');
             $table->string('activities');
             $table->string('expenses');
+            $table->string('images');
             $table->foreign('provinces_id')->references('id')->on('provinces');
             $table->timestamps();
         });

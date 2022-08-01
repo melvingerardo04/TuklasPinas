@@ -1,17 +1,9 @@
 @extends('layouts.app')
 @section('content')
 <style>
-     html{
-     scroll-behavior: smooth;
-   }
-     .container {
-        display: flex;
-        align-items: center;
-        justify-content: center
-      }
       #itineraryImage {
        height:200px;
-       width:350px;
+       width:250px;
       }
       .image {
         flex-basis: 40%
@@ -28,12 +20,14 @@
     @foreach ($var['places'] as $key => $place) 
         @php
         $location = implode(",",$var['array'][$key]);
+        $image = [];
+        $image = !empty($place->images)?explode(",",$place->images):"1.jpg";
         @endphp
         <div class="container col-md-6">
             <div class="well"> 
                 <div class=''>
                     <div class="image">
-                        <img src="/img/1.jpg" id="itineraryImage" >
+                      <img src="/storage/itineraryImages/{{!empty($place->images)?$image[0]:"Final.png"}}"   id="itineraryImage" >
                     </div>
                     <div class="text">
                         <h3>{{$place->provinces_name}}</h3>
