@@ -9,8 +9,10 @@ use TuklasPinas\User;
 use TuklasPinas\Post;
 use TuklasPinas\Like;
 use TuklasPinas\Dislike;
+use TuklasPinas\Provinces;
 use Auth;
 use Helpers;
+use DB;
 class ProfileController extends Controller
 {
     public function __construct()
@@ -21,17 +23,31 @@ class ProfileController extends Controller
     public function index()
     {
         $user = Auth::user();
+        
         $user_id =auth()->user()->id;
         $user = User::find($user_id);
         $post = Post::where("user_id",$user->id)->get();
         $getLikes = [];
         $getDisLikes = [];
+        $var = [];
         foreach ($post as $key) {
             $post = Helpers::post($key->id);
             $getLikes[$key->id] = Like::where(['post_id' => $key->id])->count();
             $getDisLikes[$key->id] = DisLike::where(['post_id' => $key->id])->count();
         }
-        return view('users.profile',compact('user',$user),['getLikes' =>$getLikes, 'getDisLikes' =>$getDisLikes])->with('posts', $user->posts);
+        $provinces = DB::table("provinces as p")
+        ->select("p.id","p.provinces_name","p.days1","p.nights","p.budget","i.places")
+        ->leftjoin("itineraries as i","i.provinces_id","p.id")
+        ->where("p.user_id",$user->id)
+        ->get();
+        if (!empty($provinces)) {
+            foreach ($provinces as $key => $province) {
+                $var['places'][$province->id] = $province;
+                $var['array'][$province->id][] = $province->places;
+            }
+        }
+        
+        return view('users.profile',compact('user',$user),['getLikes' =>$getLikes, 'getDisLikes' =>$getDisLikes])->with('posts', $user->posts)->with('var',$var);
     }
 
     public function updateProfile(Request $request){
