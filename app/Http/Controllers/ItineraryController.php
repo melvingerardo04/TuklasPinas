@@ -66,7 +66,7 @@ class ItineraryController extends Controller
         $data = new Provinces;
         $data->user_id = auth()->user()->id;
         $data->provinces_name = $request->input('provinces_name');
-        $data->days1 = $request->input('days1');
+        $data->days1 = $request->input('noOfDays');
         $data->nights = $request->input('nights');
         $data->budget = $request->input('budget');
         // $data->save();
@@ -76,6 +76,13 @@ class ItineraryController extends Controller
             $fileNameToStore = [];
             dd($request->all());
             foreach($request->days as $itinerary=>$v){
+                $days = $itinerary + 1;
+                $requestTime =  $request->input('daystime'.$days);
+                $implodeTime[$itinerary] = implode(",",$requestTime);
+            
+                $requestActivities =  $request->input('daysactivities'.$days);
+                $implodeActivities[$itinerary] = implode(",",$requestActivities);
+
                 if($request->hasFile('images')){
                     $images = $request->images;
                     foreach ($images as $key => $value) {

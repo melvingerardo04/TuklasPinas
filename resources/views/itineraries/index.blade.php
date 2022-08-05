@@ -16,7 +16,7 @@
 <center><h1>Itineraries</h1> </center>
 @php
 @endphp
-@if(count($var['places']) > 0)
+@if(count($var) > 0)
     @foreach ($var['places'] as $key => $place) 
         @php
         $location = implode(",",$var['array'][$key]);
@@ -44,6 +44,8 @@
             </div>
         </div>
     @endforeach
+@else
+<p>No Itineraries Found</p>
 @endif
                 
 @endsection

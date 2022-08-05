@@ -1,113 +1,164 @@
 @extends('layouts.app')
 @section('content')
 
-<div class="panel panel-default" style="margin-top:50px;">
-    {!! Form::open(['action' => 'ItineraryController@store', 'method' => 'POST', 'enctype' => 'multipart/form-data']) !!} 
-        <div class="panel-heading">
-            <h1 class="text-center">Create Itinerary</h1>
-        </div>
-        <div class="panel-body">
-            <div class="row col-md-12">
-                <div class="form-group ">
-                    <div class="col-md-2 col-md-offset-4 text-center">
-                        <label for="days1" value="days1" name="days1">Days</label>
-                        <input type="number" name="days1" class="col-md-1  form-control" required placeholder="Days" autocomplete="off">
-                    </div>
-                    <div class="col-md-2 text-center" >
-                        <label for="nights" value="nights" name="nights">Nights</label>
-                        <input type="number" name="nights" class="col-md-1 form-control"placeholder="Nights" autocomplete="off">
+<div class="col-md-12">
+    <!-- Custom Tabs -->
+    <div class="nav-tabs-custom">
+      <ul class="nav nav-tabs">
+        <li class="active"><a href="#itineraries" data-toggle="tab">Itineraries</a></li>
+        <li><a href="#includes" data-toggle="tab">Includes</a></li>
+      </ul>
+      <div class="tab-content">
+        <div class="tab-pane active" id="itineraries">
+            <form  method="POST" id="form_info" role="form">
+                <div class="row">
+                    <div class="form-group col-md-12">
+                        <div class="form-group col-md-3">
+                            <label for="provinces" value="provinces" name="provinces"> Provinces/Cities/Countries</label>
+                            <input type="text" name="provinces_name" class="form-control" required autocomplete="off">
+                        </div>
+                        <div class="form-group col-md-2">
+                            <label for="budget" value="budget" name="budget"> Budget</label>
+                            <input type="number" name="budget" class="form-control" required autocomplete="off">
+                        </div>
                     </div>
                 </div>
-            </div>
-            <br>
-            <table class="table table-bordered" style="margin-top:50px;">
-                <thead>
-                    <tr> 
-                        <th> Provinces/Cities/Countries</th>
-                        <th><input type="text" name="provinces_name" class="form-control" required autocomplete="off"></th>
-                        <th></th>
-                        <th>Budget</th>
-                        <th><input type="number" name="budget" class="form-control" required autocomplete="off"></th>
-                    </tr>
-                    <tr>
-                        <th>Days</th>
-                        <th>Places</th>
-                        <th>Time</th>
-                        <th>Stories</th>
-                        <th>Images</th>
-                        <th>Other Expenses</th>  
-                        <th><a href="#" class="addRow"><i class="glyphicon glyphicon-plus" style="color:black;font-size:20px;width:5px;"></i></a></th>   
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td><input type="text" name="days[]" class="form-control" required autocomplete="off"></td>
-                        <td><input type="text" name="places[]" class="form-control" required></td>
-                        <td><input type="time" name="time[]" class="form-control" required></td>
-                        <td><textarea name="activities[]" class="form-control" rows="1" required></textarea></td>
-                        <td><input type="file" name="images[]" class="form-control" required multiple></td>
-                        <td><input type="text" name="expenses[]" class="form-control expenses" autocomplete="off" required></td>
-                        <td><a href="#" class="btn btn-danger remove">X</a></td>
-                    </tr>
-                </tbody>  
-                <tfoot>
-                    <tr>
-                        <td style="border: none"></td>
-                        <td style="border: none"></td>
-                        <td style="border: none"></td>
-                        <td> Total</td>
-                        <td class="text-right"> <b class="total ">0.00</b></td>
-                        <td> <input class="btn btn-success" type="submit" name="" value="Submit"></td>     
-                    </tr>
-                </tfoot>
-            </table>
+                <div class="row">
+                    <div class="form-group col-md-12">
+                        <div class="col-md-2">
+                            <label for="days1" value="days1" name="days1">No of Days</label>
+                            <input type="number" id="noOfDays" name="noOfDays" class="col-md-1  form-control" required placeholder="Days" autocomplete="off">
+                        </div>
+                        <div class="col-md-2" >
+                            <label for="nights" value="nights" name="nights">Nights</label>
+                            <input type="number" name="nights" class="col-md-1 form-control"placeholder="Nights" autocomplete="off">
+                        </div>
+                        {{-- <div class="col-md-2" style="margin-top:25px;">
+                            <a href="#" class="btn btn-primary addRow"><i class="fa fa-plus" style="color:white;"></i></a>
+                        </div> --}}
+                    </div>
+                </div>
+                <div class="row itinerary">
+        
+                </div>
+                <div class="row ">
+                    <div class="form-group col-md-12">
+                        <input class="pull-right btn btn-danger next" type="submit" name="" value="Next">
+                    </div>
+                </div>
+            </form>
         </div>
-    {!! Form::close() !!}
+
+        <!--Includes Tab -->
+        <div class="tab-pane" id="includes">
+
+            
+        </div>
+       
+      </div>
+    </div>
+   
+    
 </div>
 <script src="{{ asset ("js/jQuery-2.1.3.min.js") }}"></script>
 <script src="{{ asset ("js/modernizr.js") }}"></script>
 <script src="{{ asset ("https://ajax.googleapis.com/ajax/libs/jquery/1.7/jquery.min.js") }}"></script>
-<script type="text/javascript"> 
-$('tbody').delegate('.expenses','keyup',
-    function(){
-        var tr=$(this).parent().parent();
-        var expenses=tr.find('.expenses').val();
-        var expenses=expenses; 
-        tr.find('.expenses').val(expenses);
-        total();
-    });
-function total(){
-    var total=0;
-    $('.expenses').each(function(i,e){
-        var expenses=$(this).val()-0;
-        total +=expenses;
-    });
-    $('.total').html(total+".00");
-} 
-    $('.addRow').on('click',function(){
-    addRow();
-    })
-    function addRow()
-    {
-        var tr='<tr>'+
-        '<td><input type="text" name="days[]" class="form-control" required ></td>'+
-        '<td><input type="text" name="places[]" class="form-control" required></td>'+
-        '<td><input type="time" name="time[]" class="form-control" required></td>'+
-        '<td><textarea name="activities[]" class="form-control" rows="1" required></textarea></td>'+
-        '<td><input type="file" name="images[]" class="form-control" required multiple></td>'+
-        '<td><input type="text" name="expenses[]" class="form-control expenses" autocomplete="off" required></td>'+
-        '<td><a href="#" class="btn btn-danger remove">X</a></td>'+
-        '</tr>';
-        $('tbody').append(tr);
-    };
-    $('.remove').live('click', function(){
-        var last=$('tbody tr').length;
-        if(last==1){
-        alert("You can't remove last row");
+<script>
+
+
+
+$('#noOfDays').unbind("change").on("change",function(e){
+    $('.itinerary').html('');
+    var value = parseFloat($('#noOfDays').val() ) + 1;
+    value = value;
+    console.log(value);
+    for ( i = 1; i < value; i++) {
+        var div = 
+            '<div class="row nextRow" id="row'+i+'">'+
+                '<div class="form-group col-md-12 ">'+
+                    '<div class="col-md-2" >'+
+                        '<label for="noOfDays" name="noOfDays">Days</label>'+
+                        '<input type="number" name="days[]"  value='+i+' class="form-control" required autocomplete="off">'+
+                    '</div>'+
+                    '<div class="col-md-2 addTime" >'+
+                        '<label for="time" name="time">Time</label>'+
+                        '<input type="time" name="daystime'+i+'[]" class="form-control" required>'+
+                    '</div>'+
+                    '<div class="col-md-5 addActivities" >'+
+                        '<label for="activities" name="activities">Activities</label>'+
+                        '<input type="text" name="daysactivities'+i+'[]" class="form-control" required>'+
+                    '</div>'+
+                    '<div class="col-md-2 addImage" >'+
+                        '<label for="Image" name="Image">Image</label>'+
+                        '<input type="file" name="daysImage'+i+'[]" multiple class="form-control" required>'+
+                    '</div>'+
+                    '<div class="col-md-1 addClose" >'+
+                        '<label for="" name="">&nbsp;</label>'+
+                        '<a href="#" class="form-control btn btn-primary addRow" id="addRow"  data-id='+i+'> <i class="fa fa-plus"></i></a>'+
+                    '</div>'+    
+                '</div>'+
+            '</div>';
+            $(".itinerary").append(div);
+            $('.addRow').unbind("click").on('click',function(){
+                addRow($(this).data('id'));
+            });
         }
-        else{
-        $(this).parent().parent().remove();
-        }
-    });
+
+});
+
+function addRow(id){
+    var addTime=
+    
+    '<div class="form-group col-md-12">'+
+        '<div class="col-md-2 col-md-offset-2" >'+
+            '<input type="time" name="daystime'+id+'[]" class=" form-control" required>'+
+        '</div>'+
+        '<div class="col-md-5" >'+
+            '<input type="text" name="daysactivities'+id+'[]" class="form-control" required>'+
+        '</div>'+
+        '<div class="col-md-2 addImage" >'+
+            // '<label for="Image" name="Image">Image</label>'+
+            '<input type="file" name="daysImage'+i+'[]" multiple class="form-control" required>'+
+        '</div>'+
+        '<div class="col-md-1 " >'+
+            // '<label for="" name="">&nbsp;</label>'+
+            '<button href="#" class="form-control btn btn-danger removeRow" data-id="delete'+id+'" > <i class="fa fa-trash"></i></button>'+
+        '</div>'+ 
+    '</div>';
+    $('#row'+id+'').append(addTime);
+};
+$('.removeRow').live('click', function(){
+    var last=$('.nextRow').length;
+    console.log(last);
+    if(last==1){
+    alert("You can't remove last row");
+    }
+    else{
+    $(this).parent().parent().remove();
+    }
+});
+
+
+$('#form_info').unbind('submit').on('submit',function(){
+		$.notyfy.closeAll();
+		var form_data = $(this).serializeArray();
+ 
+            form_data.push({
+                name : '_token',
+                value: "{{ csrf_token() }}"
+            });
+		$("button[type='submit']").button('loading');	
+		$.ajax({
+			url: "{{ route('saveItineraries') }}",
+			type: "POST",
+			dataType : "JSON",
+			data: form_data,
+			success:function(dta){
+				$("button[type='submit']").button('reset');
+			}
+		});
+		return false;
+	});
+
 </script>
-    @endsection
+@endsection

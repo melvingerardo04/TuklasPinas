@@ -68,7 +68,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
           
        <section class="cd-intro">
          
-        <img src={{asset('storage/img/1.png')}} title="bg"   style="background-size:cover;position:fixed;width:100%;height:92%;margin-left:-90x;margin-top:50px;">
+        <img src={{asset('storage/img/background.png')}} title="bg"   style="background-size:cover;position:fixed;width:100%;height:92%;margin-left:-90x;margin-top:50px;">
         <div class="cd-intro-content bouncy">
          
             <p><img src="img/Final.png" height="180px" width="550px;" style="margin-top:180px;"></p>

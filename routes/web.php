@@ -67,6 +67,7 @@ Route::resource('itineraries','ItineraryController');
 Route::get('itineraries/show/{provinces_id}', 'ItineraryController@show');
 Route::get('itineraries/provinces/{id}', 'ItineraryController@provinces');
 Route::get('/itineraries.index', 'ItineraryController@search');
+Route::post('/itineraries', 'ItineraryController@store')->name('saveItineraries');
 
 /*facebook
 Route::get('facebook', function () {
