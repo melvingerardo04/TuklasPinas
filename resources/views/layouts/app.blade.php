@@ -91,7 +91,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
       @include('inc.sidebar')
       
       <!-- Content Wrapper. Contains page content -->
-      <div class="content-wrapper"  style="margin-top:44px;">
+      <div class="content-wrapper"  style="margin-top:44px;max-height: 100%;">
         <!-- Content Header (Page header) -->
        
         <!-- Main content -->
