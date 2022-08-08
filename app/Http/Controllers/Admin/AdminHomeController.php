@@ -8,8 +8,8 @@ use TuklasPinas\Http\Controllers\Controller;
 class AdminHomeController extends Controller
 {
     public function home(){
-        $title='Admin';
-        return view('admin/home')->with('title',$title);
+        $title='Admins';
+        return view('/admin/home')->with('title',$title);
     }
 
    

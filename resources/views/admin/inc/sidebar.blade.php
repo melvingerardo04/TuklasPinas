@@ -23,7 +23,7 @@
     @else
 <!-- Left side column. contains the sidebar -->
 
-<aside class="main-sidebar" style="position:fixed;background-color:#003333;">
+<aside class="main-sidebar" style="position:fixed;background-color:#666666;">
    
     <!-- sidebar: style can be found in sidebar.less -->
     <section class="sidebar">
@@ -61,7 +61,7 @@
       <!-- Sidebar Menu -->
       <ul class="sidebar-menu"  style="font-family:Barabara;font-size:20px;line-height:50%">
         <!-- Optionally, you can add icons to the links -->
-        <li class="active"><a href="/admin/user/create"> <span style="font-family: No.SevenRegular;">Add User Admin</span>
+        <li class="active"><a href="/admin/useraccounts"> <span style="font-family: No.SevenRegular;">Users</span>
         <li><a href="/Reports"><span>Reports</span></a></li>
         <li><a href="posts"><span>Posts</span></a></li>  
         

@@ -32,6 +32,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
     <link href="{{ asset("css/background.css")}}" rel="stylesheet" type="text/css" /> 
 
     <link href="{{ asset("css/postimage.css")}}" rel="stylesheet" type="text/css" /> 
+    <link rel="stylesheet" href="css/style.css"> <!-- Resource style -->
     
 
     <style>
@@ -70,8 +71,8 @@ scratch. This page gets rid of all links and provides the needed markup only.
 
       <!-- Header -->
       
-      @include('inc.header')
       @if(Auth::guest())
+      @include('inc.header')
      
           <!-- Content Header (Page header) -->
          
@@ -82,12 +83,12 @@ scratch. This page gets rid of all links and provides the needed markup only.
             @yield('content')
        
             <button onclick="topFunction()" id="myBtn" title="Go to top">Top</button>
-            @include('inc.footer')
+            {{-- @include('inc.footer') --}}
           </section><!-- /.content -->
           
       @else 
       <!-- Sidebar -->
-    
+      @include('inc.header')
       @include('inc.sidebar')
       
       <!-- Content Wrapper. Contains page content -->

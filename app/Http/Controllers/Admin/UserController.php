@@ -4,7 +4,9 @@ namespace TuklasPinas\Http\Controllers\Admin;
 
 use Illuminate\Http\Request;
 use TuklasPinas\Http\Controllers\Controller;
-use TuklasPinas\Users;
+use TuklasPinas\Admin\User;
+use Helpers;
+use DB;
 
 class UserController extends Controller
 {
@@ -15,9 +17,10 @@ class UserController extends Controller
      */
     public function index()
     {
-        
-        $users = Users::orderBy('id','asc')->paginate(10);
-        return view('admin.user.index',compact('users'))-> with ('users', $users);
+        $users = User::orderBy('id','asc')->get();
+        return view('admin/users/index')->with('users',$users);
+        // $users = User::orderBy('id','asc')->get();
+        // return view('/admin/users/index')->with('users', $users);
     }
 
     /**
@@ -84,5 +87,41 @@ class UserController extends Controller
     public function destroy($id)
     {
         //
+    }
+
+
+    public function userDatatable(Request $request){
+        $var = (object) $request->all();
+        $columns = array(
+            array( 'db' => 'id', 'dt' => 0,'orderable' => false, 'sortnum'=>true),
+            array( 'db' => 'FullName', 'dt' => 1 ),
+            array( 'db' => 'email', 'dt' => 2 ),
+            array( 'db' => 'userType', 'dt' => 3 ),
+            array( 'db' => 'id', 'dt' => 4,'formatter' => function($d,$mrow){
+                return "<div class='btn-group btn-group-sm'>
+                <a data-id='{$d}' class='btn btn-warning'><i class='fa fa-eye'></i></a>
+                <a data-id='{$d}' class='btn btn-success'><i class='fa fa-edit'></i></a>
+                <a data-id='{$d}' class='btn btn-danger'><i class='fa fa-trash'></i></a>
+                </div>";
+            },'orderable' => false)
+        );
+        # This is for extra condition
+        $where = array();
+    
+        $result = array("aaData"=>array(),"sEcho"=>(int)$var->sEcho,"iTotalDisplayRecords"=>0,"iTotalRecords"=>0); 
+
+        $rsql   = User::select("id",DB::raw('CONCAT(lastName,", ", firstName, " ", middleName) AS FullName'),"email","userType");
+
+        $likes = array(
+            "email",
+            "userType"
+        );  
+        $params = array(
+            "var" => $var,
+            "columns" => $columns,
+            "likes" => $likes,
+            "sql" => $rsql
+        );
+        Helpers::process_dt_array($params);
     }
 }
