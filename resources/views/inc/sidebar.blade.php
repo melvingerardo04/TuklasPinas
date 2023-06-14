@@ -14,6 +14,11 @@
                     background:#000;                   
                     background-attachment: fixed;
                   }
+                  .sidebar-menu{
+                    font-family:Brush Script MT;
+                    font-size:30px;
+                    line-height:50%
+                  }
       </style>
      
 </head>

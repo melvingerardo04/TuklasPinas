@@ -32,8 +32,9 @@ scratch. This page gets rid of all links and provides the needed markup only.
     <link href="{{ asset("css/background.css")}}" rel="stylesheet" type="text/css" /> 
 
     <link href="{{ asset("css/postimage.css")}}" rel="stylesheet" type="text/css" /> 
+    @if(Auth::guest())
     <link rel="stylesheet" href="css/style.css"> <!-- Resource style -->
-    
+    @endif
 
     <style>
      .profile_pic {

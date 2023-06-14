@@ -163,5 +163,14 @@ class HelperClass {
 		endif;
 		return $result;
 	}
+    public function userType($id,$addblank = false){
+        $allcaption = "- user type -";
+        $result = $addblank?array("0"=>$allcaption):array();
+        $types = array("1"=>"Traveler","2"=>"Tourguide");
+        foreach ($types as $key => $value) {
+            $result[$value] = $value;
+        }
+        return $result;
+    }
 
 }

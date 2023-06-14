@@ -112,7 +112,22 @@ class UserController extends Controller
 
         $rsql   = User::select("id",DB::raw('CONCAT(lastName,", ", firstName, " ", middleName) AS FullName'),"email","userType");
 
+        if (!empty($var->name)) {
+            $rsql = $rsql->where("lastName",$var->name);
+            // $rsql = $rsql->where("firstName",$var->name);
+            // $rsql = $rsql->where("middleName",$var->name);
+        }
+        if (!empty($var->email)) {
+            $rsql = $rsql->where("email",$var->email);
+        }
+        if (!empty($var->userType)) {
+            $rsql = $rsql->where("userType",$var->userType);
+        }
+        // dd($var->email);
+
+
         $likes = array(
+            "lastName",
             "email",
             "userType"
         );  

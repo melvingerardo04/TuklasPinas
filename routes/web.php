@@ -81,6 +81,7 @@ Route::get('auth/facebook/callback', 'Auth\FacebookController@handleFacebookCall
 Route::get('admin-login', 'Admin\Auth\LoginController@showLoginForm')->name('admin.login');
 Route::post('admin-login', 'Admin\Auth\LoginController@login');
 Route::post('logout', 'Auth\LoginController@logout')->name('logout');
+Route::post('createusers' , 'Auth\RegisterController@create')->name('createusers');
 
 //Admin Pages
 //Route::get('/admin/home', 'Admin\HomeController@home')->name('admin.pages.home');
@@ -91,4 +92,7 @@ Route::group(['namespace'=>'Admin','middleware'=>'auth:admin'],function(){
     Route::get('/admin/useraccounts' , 'UserController@index')->name('admin.useraccounts');
 
     Route::get('userDatatable','UserController@userDatatable')->name('userDatatable');
+
+
+    
 });
